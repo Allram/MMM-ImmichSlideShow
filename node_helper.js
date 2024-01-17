@@ -354,7 +354,7 @@ module.exports = NodeHelper.create({
       responseType: 'arraybuffer'
     }).then(async(response) => {
       try {
-        const imageBuffer = Buffer.from(response.data, 'binary');
+        let imageBuffer = Buffer.from(response.data, 'binary');
         if (image.originalPath.toLowerCase().endsWith('heic')) {
           Log.info(LOG_PREFIX + ' converting HEIC to JPG..');
           // convert the main image to jpeg
@@ -371,6 +371,9 @@ module.exports = NodeHelper.create({
           'IMMICHSLIDESHOW_DISPLAY_IMAGE',
           this.lastImageLoaded
         );
+
+      // Empty the imageBuffer to free up memory
+      imageBuffer = null;
       } catch (e) {
         Log.error(LOG_PREFIX + 'Oops!  Exception while loading and converting image', e.message);
       }
