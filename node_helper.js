@@ -5,6 +5,12 @@ const NodeHelper = require('node_helper');
 const axios = require('axios');
 const convert = require('heic-convert');
 
+const memwatch = require('memwatch-next');
+
+memwatch.on('leak', (info) => {
+  Log.error(LOG_PREFIX + 'Memory leak detected: ', info);
+});
+
 const LOG_PREFIX = 'MMM-ImmichSlideShow :: node_helper :: ';
 const API_LEVEL_1_82 = '1.82+';
 const API_LEVEL_1 = '1.0+';
