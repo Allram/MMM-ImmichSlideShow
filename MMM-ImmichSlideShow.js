@@ -370,10 +370,6 @@ Module.register('MMM-ImmichSlideShow', {
   },
 
   displayImage: function (imageinfo) {
-    if (!imageinfo.data) {
-      Log.error(LOG_PREFIX + 'data is undefined in imageinfo:', imageinfo);
-      return;
-    }
 
     const image = new Image();
     image.onload = () => {
@@ -488,9 +484,7 @@ Module.register('MMM-ImmichSlideShow', {
       this.imagesDiv.appendChild(transitionDiv);
     };
 
-    console.log(JSON.stringify(imageinfo.data));
-    console.log(imageinfo.data);
-    image.src = 'data:image/jpeg;base64, ' + imageinfo.data.imageData;
+    image.src = 'data:image/jpeg;base64, ' + imageinfo.data;
     this.sendSocketNotification('IMMICHSLIDESHOW_IMAGE_UPDATED', {
       url: imageinfo.path
     });
