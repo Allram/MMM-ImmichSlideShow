@@ -290,6 +290,7 @@ module.exports = NodeHelper.create({
 
       // Clear for memory
       imageBuffer = null;
+      //response = null;
     } catch (e) {
       Log.error(LOG_PREFIX + 'Oops! Exception while loading and converting image', e.message);
     } finally {
@@ -303,7 +304,8 @@ module.exports = NodeHelper.create({
 },
   getPrevImage() {
     this.index -= 2;
-
+    imageBuffer = null;
+    response = null;
     if (this.index < 0) {
       Log.info('Reaching beginning of pictures! looping around...');
       this.index = this.imageList.length - this.index;
@@ -344,6 +346,8 @@ module.exports = NodeHelper.create({
         setTimeout(() => this.gatherImageList(config, true), 200);
       } else {
         this.getNextImage(true);
+        imageBuffer = null;
+        response = null;
       }
       this.imageList = null;
     } else if (notification === 'IMMICHSLIDESHOW_PLAY_VIDEO') {
