@@ -93,7 +93,7 @@ module.exports = NodeHelper.create({
 
     this.http = axios.create({
       baseURL: config.immichUrl + '/api',
-      timeout: 5000,
+      timeout: 15000,
       headers: {
         'x-api-key': config.apiKey,
         'Accept': 'application/json'
