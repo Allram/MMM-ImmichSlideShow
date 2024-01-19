@@ -85,7 +85,7 @@ module.exports = NodeHelper.create({
 
     // Means we have come to the end of the list and getNextImage has called gatherImageList
     // Restart slide show
-    if (this.imageList.length > 0) {
+    if (this.imageList?.length > 0) {
       Log.info(LOG_PREFIX + ' End of imagelist. Restarting slideshow.');
       this.index = 0;
       return;
