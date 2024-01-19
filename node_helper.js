@@ -214,6 +214,14 @@ module.exports = NodeHelper.create({
   },
 
   async getNextImage(showCurrent) {
+    // If an image is currently being loaded, wait for it to finish
+    if (this.loadingImage) {
+      return;
+    }
+  
+    this.loadingImage = true;
+
+    try {
     Log.info(LOG_PREFIX + 'Current Image: ', this.index + 1, ' of ', this.imageList ? this.imageList.length : 0, '. Getting next image...');
 
     if (!this.imageList || this.index >= this.imageList.length || Date.now() - this.pictureDate > 86400000) {
@@ -284,9 +292,15 @@ module.exports = NodeHelper.create({
       imageBuffer = null;
     } catch (e) {
       Log.error(LOG_PREFIX + 'Oops! Exception while loading and converting image', e.message);
+    } finally {
+      // Reset the loading flag
+      this.loadingImage = false;
     }
-  },
-
+  } catch (error) {
+    Log.error(LOG_PREFIX + 'Oops! Exception in getNextImage', error.message);
+    this.loadingImage = false;
+  }
+},
   getPrevImage() {
     this.index -= 2;
 
