@@ -370,6 +370,10 @@ Module.register('MMM-ImmichSlideShow', {
   },
 
   displayImage: function (imageinfo) {
+    if (!imageinfo.data) {
+      Log.error(LOG_PREFIX + 'data is undefined in imageinfo:', imageinfo);
+      return;
+    }
 
     const image = new Image();
     image.onload = () => {
