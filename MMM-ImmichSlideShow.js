@@ -484,7 +484,7 @@ Module.register('MMM-ImmichSlideShow', {
       this.imagesDiv.appendChild(transitionDiv);
     };
 
-    image.src = 'data:image/jpeg;base64, ' + imageinfo.data;
+    image.src = 'data:image/jpeg;base64, ' + imageinfo.data.imageData;
     this.sendSocketNotification('IMMICHSLIDESHOW_IMAGE_UPDATED', {
       url: imageinfo.path
     });
