@@ -5,7 +5,7 @@ const NodeHelper = require('node_helper');
 const axios = require('axios');
 const convert = require('heic-convert');
 
-const memwatch = require('memwatch-next');
+const memwatch = require('memwatch');
 
 memwatch.on('leak', (info) => {
   Log.error(LOG_PREFIX + 'Memory leak detected: ', info);
