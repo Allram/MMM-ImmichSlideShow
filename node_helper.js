@@ -4,8 +4,8 @@ const Log = require('../../js/logger.js');
 const NodeHelper = require('node_helper');
 const axios = require('axios');
 const convert = require('heic-convert');
-
-const memwatch = require('memwatch');
+const streamifier = require('streamifier');
+const memwatch = require('node-memwatch-x');
 
 memwatch.on('leak', (info) => {
   Log.error(LOG_PREFIX + 'Memory leak detected: ', info);
@@ -270,8 +270,8 @@ module.exports = NodeHelper.create({
     }
 
     try {
-      const response = await this.http.get('/asset/file/' + image.id, { responseType: 'arraybuffer' });
-      let imageBuffer = Buffer.from(response.data, 'binary');
+      const response = await this.http.get('/asset/file/' + image.id, { responseType: 'stream' });
+      const imageBuffer = await streamifier.createReadStream(response.data).read(); // Stream the image data
 
       if (image.originalPath.toLowerCase().endsWith('heic')) {
         Log.info(LOG_PREFIX + ' converting HEIC to JPG..');
@@ -287,7 +287,7 @@ module.exports = NodeHelper.create({
       self.sendSocketNotification('IMMICHSLIDESHOW_DISPLAY_IMAGE', this.lastImageLoaded);
 
       // Clear for memory
-      imageBuffer = null;
+      imageBuffer.destroy();
     } catch (e) {
       Log.error(LOG_PREFIX + 'Oops! Exception while loading and converting image', e.message);
     }
