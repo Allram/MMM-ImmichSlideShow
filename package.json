@@ -8,5 +8,17 @@
     "jpeg-autorotate": "^9.0.0",
     "axios": "^1.6.5",
     "heic-convert": "^2.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "latest",
+    "@stylistic/eslint-plugin": "latest",
+    "eslint": "^8.56.0",
+    "eslint-plugin-import": "latest",
+    "globals": "latest",
+    "prettier": "^3.1.1"
+  },
+  "scripts": {
+    "lint": "prettier --check . && eslint .",
+    "lint:fix": "prettier --write . && eslint . --fix"
   }
 }
