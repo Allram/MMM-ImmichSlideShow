@@ -629,6 +629,9 @@ Module.register('MMM-ImmichSlideShow', {
   },
 
   resume: function () {
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
     //this.updateImage(); //Removed to prevent image change whenever MMM-Carousel changes slides
     this.suspend();
     var self = this;
