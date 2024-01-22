@@ -637,11 +637,11 @@ Module.register('MMM-ImmichSlideShow', {
     var self = this;
 
     if (self.config.changeImageOnResume) {
-      self.updateImage();
+      //self.updateImage();
     }
 
     function updateImageTimeout() {
-      self.updateImage();
+      //self.updateImage();
       self.timer = setTimeout(updateImageTimeout, self.config.slideshowSpeed);
     }
 

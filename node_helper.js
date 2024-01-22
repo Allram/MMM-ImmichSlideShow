@@ -20,6 +20,8 @@ module.exports = NodeHelper.create({
     this.http = null;
     this.pictureDate = 0;
     this.apiLevel = API_LEVEL_1;
+    this.timer = null;
+    self = this;
   },
 
   shuffleArray(array) {
@@ -207,10 +209,20 @@ module.exports = NodeHelper.create({
     const returnPayload = {
       identifier: config.identifier
     };
+    if (this.timer) {
+      Log.debug('BACKGROUNDSLIDESHOW: recreating update timer');
+      var it = this.timer;
+      this.timer = null;
+      clearTimeout(it);
+    }
+    this.timer = setTimeout(function () {
+      self.getNextImage();
+    }, self.config.slideshowSpeed);
 
     if (sendNotification) {
       this.sendSocketNotification('IMMICHSLIDESHOW_READY', returnPayload);
     }
+    this.getNextImage();
   },
 
   async getNextImage(showCurrent) {
@@ -220,24 +232,30 @@ module.exports = NodeHelper.create({
     }
   
     this.loadingImage = true;
-
+  
     try {
       const startTime = Date.now(); // Record the start time
       Log.info(LOG_PREFIX + 'Current Image: ', this.index + 1, ' of ', this.imageList ? this.imageList.length : 0, '. Getting next image...');
+  
+      if (!this.imageList || this.index >= this.imageList.length || Date.now() - this.pictureDate > 86400000) {
+        Log.info(LOG_PREFIX + 'image list is empty or index out of range! fetching new image list...');
+        await this.gatherImageList(this.config);
+      }
+  
+      if (!this.imageList || this.imageList.length === 0) {
+        Log.info(LOG_PREFIX + 'image list is empty! setting timeout for next image...');
+        setTimeout(() => this.getNextImage(this.config), 300000);
+        return;
+      }
+  
+      const nextIndex = (this.index + 1) % this.imageList.length; // Calculate the index of the next image
+      const nextImage = this.imageList[nextIndex];
+      const image = this.imageList[this.index];
+      const self = this;
 
-    if (!this.imageList || this.index >= this.imageList.length || Date.now() - this.pictureDate > 86400000) {
-      Log.info(LOG_PREFIX + 'image list is empty or index out of range! fetching new image list...');
-      await this.gatherImageList(this.config);
-    }
-
-    if (!this.imageList || this.imageList.length === 0) {
-      Log.info(LOG_PREFIX + 'image list is empty! setting timeout for next image...');
-      setTimeout(() => this.getNextImage(this.config), 300000);
-      return;
-    }
-
-    const image = this.imageList[this.index];
-    const self = this;
+  
+      // Preload the next image in the background
+      this.preloadNextImage(nextImage);
 
     if (showCurrent) {
       self.sendSocketNotification('IMMICHSLIDESHOW_DISPLAY_IMAGE', this.lastImageLoaded);
@@ -305,6 +323,23 @@ module.exports = NodeHelper.create({
   } finally {
     // Reset the loading flag
     this.loadingImage = false;
+  }
+},
+
+async preloadNextImage(nextImage) {
+  try {
+    const response = await this.http.get('/asset/file/' + nextImage.id, { responseType: 'arraybuffer' });
+    const imageBuffer = Buffer.from(response.data, 'binary');
+    // Log that the next image is preloaded
+    Log.info(LOG_PREFIX + 'Next image preloaded:', nextImage.originalPath);
+
+    // You can store or process the preloaded image as needed
+
+    // Clear for memory
+    // imageBuffer = null; // Don't clear this, as it's needed for the preload
+    // response = null;
+  } catch (e) {
+    Log.error(LOG_PREFIX + 'Oops! Exception while preloading next image', e.message);
   }
 },
   getPrevImage() {
