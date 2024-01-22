@@ -13,12 +13,12 @@ const config = [
         EXIF: 'readonly',
         Log: 'readonly',
         Module: 'readonly',
-        moment: 'readonly',
-      },
+        moment: 'readonly'
+      }
     },
     plugins: {
       ...eslintPluginStylistic.configs['all-flat'].plugins,
-      import: eslintPluginImport,
+      import: eslintPluginImport
     },
     rules: {
       ...eslintConfigs.all.rules,
@@ -55,19 +55,19 @@ const config = [
       '@stylistic/indent': ['error', 2],
       '@stylistic/quote-props': ['error', 'as-needed'],
       '@stylistic/quotes': ['error', 'single'],
-      '@stylistic/padded-blocks': ['error', 'never'],
-    },
+      '@stylistic/padded-blocks': ['error', 'never']
+    }
   },
   {
     files: ['**/*.mjs'],
     languageOptions: {
       globals: {
-        ...globals.node,
+        ...globals.node
       },
-      sourceType: 'module',
+      sourceType: 'module'
     },
     plugins: {
-      ...eslintPluginStylistic.configs['all-flat'].plugins,
+      ...eslintPluginStylistic.configs['all-flat'].plugins
     },
     rules: {
       ...eslintConfigs.all.rules,
@@ -76,9 +76,9 @@ const config = [
       'max-lines-per-function': ['error', 100],
       'no-magic-numbers': 'off',
       'one-var': 'off',
-      'prefer-destructuring': 'off',
-    },
-  },
+      'prefer-destructuring': 'off'
+    }
+  }
 ];
 
 /*
@@ -91,15 +91,11 @@ const debug = false;
 
 if (debug === true) {
   const FileSystem = require('fs');
-  FileSystem.writeFile(
-    'eslint-config-DEBUG.json',
-    JSON.stringify(config, null, 2),
-    (error) => {
-      if (error) {
-        throw error;
-      }
-    },
-  );
+  FileSystem.writeFile('eslint-config-DEBUG.json', JSON.stringify(config, null, 2), (error) => {
+    if (error) {
+      throw error;
+    }
+  });
 }
 
 module.exports = config;
