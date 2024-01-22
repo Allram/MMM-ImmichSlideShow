@@ -5,9 +5,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "jpeg-autorotate": "9.0.0",
-    "axios": "1.6.5",
-    "heic-convert": "2.1.0",
-    "node-memwatch-x": "1.0.1"
+    "jpeg-autorotate": "^9.0.0",
+    "axios": "^1.6.5",
+    "heic-convert": "^2.1.0"
   }
 }
