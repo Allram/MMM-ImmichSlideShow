@@ -2,8 +2,7 @@
 
 This is a MagicMirror module based on <a href="https://github.com/darickc/MMM-BackgroundSlideshow">MMM-BackgroundSlideshow</a> that works with <a href="https://immich.app/">Immich</a>.
 
-The `MMM-ImmichSlideShow` module is designed to display images fullscreen, one at a time on a fixed interval, from <a href="https://immich.app/">Immich</a>. These images can be shown in order or at random. The images can transition from one to the other and be shown with no edge (cover) or the entire image (contain).  The configuration is also mostly matching MMM-Background.
-
+The `MMM-ImmichSlideShow` module is designed to display images fullscreen, one at a time on a fixed interval, from <a href="https://immich.app/">Immich</a>. These images can be shown in order or at random. The images can transition from one to the other and be shown with no edge (cover) or the entire image (contain). The configuration is also mostly matching MMM-Background.
 
 <img src="https://github.com/darickc/MMM-BackgroundSlideshow/blob/master/screenshots/landscape.jpg" style="width: 300px;" />
 <img src="https://github.com/darickc/MMM-BackgroundSlideshow/blob/master/screenshots/portait.jpg" style="width: 300px;" />
@@ -44,9 +43,9 @@ modules: [
     module: 'MMM-ImmichSlideShow',
     position: 'fullscreen_below',
     config: {
-	  apiKey: '<Your API key>',
-	  immichUrl: 'https://<Your Immich hostname/IP>:<port>',
-	  mode: 'memory',
+      apiKey: '<Your API key>',
+      immichUrl: 'https://<Your Immich hostname/IP>:<port>',
+      mode: 'memory',
       numDaysToInclude: 7,
       transitionImages: true
     }
@@ -310,10 +309,10 @@ The following properties can be configured:
     </tbody>
 </table>
 
-
 ## Creating an API Key
 
 To get an API Key:
+
 1. Login to your Immich instance
 2. Click on your username in the top right cornder
 3. Select `Account Settings`.
