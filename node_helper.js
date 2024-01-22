@@ -93,7 +93,7 @@ module.exports = NodeHelper.create({
 
     this.http = axios.create({
       baseURL: config.immichUrl + '/api',
-      timeout: 15000,
+      timeout: 60000, // Set to 60 seconds
       headers: {
         'x-api-key': config.apiKey,
         'Accept': 'application/json'
@@ -222,7 +222,8 @@ module.exports = NodeHelper.create({
     this.loadingImage = true;
 
     try {
-    Log.info(LOG_PREFIX + 'Current Image: ', this.index + 1, ' of ', this.imageList ? this.imageList.length : 0, '. Getting next image...');
+      const startTime = Date.now(); // Record the start time
+      Log.info(LOG_PREFIX + 'Current Image: ', this.index + 1, ' of ', this.imageList ? this.imageList.length : 0, '. Getting next image...');
 
     if (!this.imageList || this.index >= this.imageList.length || Date.now() - this.pictureDate > 86400000) {
       Log.info(LOG_PREFIX + 'image list is empty or index out of range! fetching new image list...');
@@ -297,8 +298,12 @@ module.exports = NodeHelper.create({
       // Reset the loading flag
       this.loadingImage = false;
     }
+    const endTime = Date.now(); // Record the end time
+    Log.info(LOG_PREFIX + 'Image loading time: ' + (endTime - startTime) + 'ms');
   } catch (error) {
     Log.error(LOG_PREFIX + 'Oops! Exception in getNextImage', error.message);
+  } finally {
+    // Reset the loading flag
     this.loadingImage = false;
   }
 },
