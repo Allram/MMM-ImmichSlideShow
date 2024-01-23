@@ -315,33 +315,29 @@ Module.register('MMM-ImmichSlideShow', {
 
   // Override dom generator.
   getDom: function () {
-    var wrapper = document.createElement('div');
-    this.imagesDiv = document.createElement('div');
-    this.imagesDiv.className = 'images';
-    wrapper.appendChild(this.imagesDiv);
+    if (!this.wrapper) {
+        this.wrapper = document.createElement('div');
+        this.imagesDiv = document.createElement('div');
+        this.imagesDiv.className = 'images';
+        this.wrapper.appendChild(this.imagesDiv);
 
-    if (this.config.showImageInfo) {
-      this.imageInfoDiv = this.createImageInfoDiv(wrapper);
+        if (this.config.showImageInfo) {
+            this.imageInfoDiv = this.createImageInfoDiv(this.wrapper);
+        }
+
+        if (this.config.showProgressBar) {
+            this.createProgressbarDiv(this.wrapper, this.config.slideshowSpeed);
+        }
     }
 
-    if (this.config.showProgressBar) {
-      this.createProgressbarDiv(wrapper, this.config.slideshowSpeed);
-    }
-
-    if (this.config.apiKey.length == 0) {
-      Log.error(
-        LOG_PREFIX + 'Missing required parameter apiKey.'
-      );
+    if (this.config.apiKey.length === 0) {
+        Log.error(LOG_PREFIX + 'Missing required parameter apiKey.');
     } else {
-      // create an empty image list
-      // this.imageList = [];
-      // set beginning image index to 0, as it will auto increment on start
-      // this.imageIndex = 0;
-      this.updateImageList();
+        this.updateImageList();
     }
 
-    return wrapper;
-  },
+    return this.wrapper;
+},
 
   createDiv: function () {
     var div = document.createElement('div');
