@@ -315,29 +315,42 @@ Module.register('MMM-ImmichSlideShow', {
 
   // Override dom generator.
   getDom: function () {
-    if (!this.wrapper) {
-        this.wrapper = document.createElement('div');
+    // If imagesDiv already exists, remove its children to avoid memory leak
+    if (this.imagesDiv) {
+        while (this.imagesDiv.firstChild) {
+            this.imagesDiv.removeChild(this.imagesDiv.firstChild);
+        }
+    } else {
+        // Create imagesDiv if it doesn't exist
         this.imagesDiv = document.createElement('div');
         this.imagesDiv.className = 'images';
-        this.wrapper.appendChild(this.imagesDiv);
-
-        if (this.config.showImageInfo) {
-            this.imageInfoDiv = this.createImageInfoDiv(this.wrapper);
-        }
-
-        if (this.config.showProgressBar) {
-            this.createProgressbarDiv(this.wrapper, this.config.slideshowSpeed);
-        }
     }
 
-    if (this.config.apiKey.length === 0) {
-        Log.error(LOG_PREFIX + 'Missing required parameter apiKey.');
+    var wrapper = document.createElement('div');
+    wrapper.appendChild(this.imagesDiv);
+
+    if (this.config.showImageInfo) {
+      this.imageInfoDiv = this.createImageInfoDiv(wrapper);
+    }
+
+    if (this.config.showProgressBar) {
+      this.createProgressbarDiv(wrapper, this.config.slideshowSpeed);
+    }
+
+    if (this.config.apiKey.length == 0) {
+      Log.error(
+        LOG_PREFIX + 'Missing required parameter apiKey.'
+      );
     } else {
-        this.updateImageList();
+      // create an empty image list
+      // this.imageList = [];
+      // set beginning image index to 0, as it will auto increment on start
+      // this.imageIndex = 0;
+      this.updateImageList();
     }
 
-    return this.wrapper;
-},
+    return wrapper;
+  },
 
   createDiv: function () {
     var div = document.createElement('div');
